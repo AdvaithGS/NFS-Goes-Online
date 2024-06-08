@@ -38,6 +38,18 @@ fn send_response(mut code : u32, file : &str, mut stream : &TcpStream) -> (){
         let response = format!("{status_line}\r\nContent-Length : {length}\r\n\r\n{contents}");     
         stream.write_all(response.as_bytes()).unwrap();
 
+    }else if code == 410{
+        let status_line = "HTTP/1.1 410 Gone";
+        let response = format!("{status_line}\r\nContent-Length : {length}\r\n\r\n{contents}");     
+        stream.write_all(response.as_bytes()).unwrap();
+    }else if code == 413{
+        let status_line = "HTTP/1.1 413 Payload Too Large";
+        let response = format!("{status_line}\r\nContent-Length : {length}\r\n\r\n{contents}");     
+        stream.write_all(response.as_bytes()).unwrap();
+    }else if code == 411{
+        let status_line = "HTTP/1.1 411 Length Required";
+        let response = format!("{status_line}\r\nContent-Length : {length}\r\n\r\n{contents}");     
+        stream.write_all(response.as_bytes()).unwrap();
     }else{
         stream.write_all("  ".to_string().as_bytes()).unwrap();
     }
@@ -58,6 +70,12 @@ fn handle_connection(mut stream : TcpStream){
     }else if type_request != "GET" || http_version != "HTTP/1.1" {
         send_response(400,"400.html",&stream);
         // stream.write_all(response.as_bytes()).unwrap();
+    }else if  resource == "/yourdad"{
+        send_response(410,"410.html",&stream);
+    }else if  resource == "/yourmom"{
+        send_response(413,"413.html",&stream);
+    }else if  resource == "/yourdick"{
+        send_response(411,"411.html",&stream);
     }else{
         send_response(404,"404.html",&stream);
         // stream.write_all(response.as_bytes()).unwrap();
