@@ -4,3 +4,6 @@ libmfs
 mkfs
 server
 test
+*.o
+.editorconfig
+/.vscode
