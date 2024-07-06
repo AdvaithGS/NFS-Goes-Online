@@ -3,7 +3,7 @@ database
 libmfs
 mkfs
 server
-test
+test*
 *.o
 .editorconfig
 /.vscode
