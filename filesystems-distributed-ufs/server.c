@@ -70,8 +70,8 @@ bool EvalRequest(mes_t* message, int* sd) {
     assert(image != MAP_FAILED);
     s = (super_t*)image;
     
-    files.data_bm = *(bitmap_t*)(image + s->data_bitmap_addr * UFS_BLOCK_SIZE);
-    files.inode_bm = *(bitmap_t*)(image + s->inode_bitmap_addr * UFS_BLOCK_SIZE);
+    files.data_bm = (bitmap_t*)(image + s->data_bitmap_addr * UFS_BLOCK_SIZE);
+    files.inode_bm = (bitmap_t*)(image + s->inode_bitmap_addr * UFS_BLOCK_SIZE);
     files.inodes = (inode_t*)(image + s->inode_region_addr * UFS_BLOCK_SIZE);
     
     switch (message->mes_type){
@@ -101,19 +101,72 @@ bool EvalRequest(mes_t* message, int* sd) {
             inode_t * inode = files.inodes + message->inum;
             if(message->inum >= UFS_BLOCK_SIZE/sizeof(inode_t) || message->inum < 0){
                 return;
-            }else if(!files.inode_bm.bits[message->inum]){
+            }else if(!files.inode_bm->bits[message->inum]){
                 return;
-            }else if(message->offset > inode->size){
+            }else if(message->offset >= inode->size){
                 return;
             }else if(message->nbytes > inode->size - message->offset){
                 return;
             }
-            char * file = inode->direct[0];
-            char * answer;
-            ;
+            int a = message->offset/UFS_BLOCK_SIZE;
+            int b = message->offset%UFS_BLOCK_SIZE;
+            char * file = image + UFS_BLOCK_SIZE*inode->direct[a];
+            char * answer = malloc(message->nbytes);
+            for(int i = 0; i < message->nbytes; i ++){
+                if(b + i == UFS_BLOCK_SIZE){
+                    file = image + UFS_BLOCK_SIZE*inode->direct[a+1];
+                }
+                if(b + i >= UFS_BLOCK_SIZE){
+                    answer[i] = file[b + i - UFS_BLOCK_SIZE];
+                }else{
+                    answer[i] = file[b + i];
+                }
+            }
+            puts(answer);
+            break;
             
+        case __write:
+            printf("At write!");
+            inode_t * inode = files.inodes + message->inum;
+            if(inode->type == UFS_DIRECTORY){
+                return;
+            }else if(message->inum >= UFS_BLOCK_SIZE/sizeof(inode_t) || message->inum < 0){
+                return;
+            }else if(!files.inode_bm->bits[message->inum]){
+                return;
+            }else if(message->offset < 0 || message->offset >= inode->size){
+                return;
+            }else if(message->nbytes > inode->size - message->offset){
+                return;
+            }
+            int extra = (message->offset + message->nbytes) > inode->size ? message->offset + message->nbytes - inode->size : 0;
+            int a = message->offset/UFS_BLOCK_SIZE;
+            int b = message->offset%UFS_BLOCK_SIZE;
+            char * file = image + UFS_BLOCK_SIZE*inode->direct[a];
+            int i = 0;
+            memcpy(file, message->buffer , strlen(message->nbytes) - extra);
+            
+            if(i == message->nbytes){
+                ;
+            }else if(!extra){
+                file = image + UFS_BLOCK_SIZE*inode->direct[a+1];
+                memcpy(file, message->buffer + message->nbytes - extra, extra);
+            }else{
+                int j = 0;
+                while(j < s->data_bitmap_len*1024){
+                    if(files.data_bm->bits[j] == 1) break;
+                    j++;
+                }
+                inode->direct[a+1] = s->data_region_addr + j;
+                file = image + UFS_BLOCK_SIZE*inode->direct[a+1];
+                memcpy(file, message->buffer + message->nbytes - extra, extra);
+            }                
+            rc = msync(image, UFS_BLOCK_SIZE*36 ,MS_SYNC);
+            assert(rc > -1);
+            break;
+        
         default:
-            break;   
+            break;
     
     }
     printf("Here?\n");
