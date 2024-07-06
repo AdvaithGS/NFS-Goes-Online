@@ -16,6 +16,7 @@ typedef enum {
     __write,
     __read,
     __creat,
+    __wave,
     __unlink,
     __shut,
 } mes_type;
@@ -44,7 +45,6 @@ typedef struct {
 
 
 
-
 // presumed: block 0 is the super block
 typedef struct __super {
     int inode_bitmap_addr; // block address (in blocks)
@@ -62,8 +62,8 @@ typedef struct __super {
 typedef struct {
     int fd;
     super_t s;
-    bitmap_t inode_bm;
-    bitmap_t data_bm;
+    bitmap_t * inode_bm;
+    bitmap_t * data_bm;
     inode_t * inodes;
 } filesystem;
 
