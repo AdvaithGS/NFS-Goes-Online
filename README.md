@@ -1,7 +1,7 @@
 This is my work for the Networking File System Goes Online project, conducted by Programming Club IITK over the summers of 2024. 
 
 The project mainly covered:
-- The basics of the Rust language
+- The [basics of the Rust language](https://github.com/AdvaithGS/NFS-Goes-Online/tree/main/Assignment%201)
     - Ownership
     - Structs
     - Enums
@@ -19,7 +19,7 @@ The project mainly covered:
     - The OSI Model
     - The HTTP Protocol
     - Studied UDP and TCP in depth
-- Made a Single-Threaded Web Server in Rust
+- [Made a Single-Threaded Web Server in Rust](https://github.com/AdvaithGS/NFS-Goes-Online/tree/main/Assignment%201)
 - Operating Systems
     - Virtualization (Process Creation and management)
     - File Systems and Implementation
@@ -29,4 +29,4 @@ The project mainly covered:
     - Packet Loss and Reliability
     - Idempotence and Statelessness
     - Remote Process Call (RPC)
-- Building a Networking File System in C
+- [Building a Networking File System in C](https://github.com/AdvaithGS/NFS-Goes-Online/tree/main/filesystems-distributed-ufs)
