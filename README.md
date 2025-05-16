@@ -1,0 +1,32 @@
+This is my work for the Networking File System Goes Online project, conducted by Programming Club IITK over the summers of 2024. 
+
+The project mainly covered:
+- The basics of the Rust language
+    - Ownership
+    - Structs
+    - Enums
+    - Packages
+    - Crates and Modules
+    - Collections
+- Asynchronous Programming
+    - Threads
+    - Async/Await
+    - Usage in a Webserver
+- Networking in a distributed system
+    - Client-Server Architecture
+    - Peer-to-Peer architecture
+- Network Layers and protocols -
+    - The OSI Model
+    - The HTTP Protocol
+    - Studied UDP and TCP in depth
+- Made a Single-Threaded Web Server in Rust
+- Operating Systems
+    - Virtualization (Process Creation and management)
+    - File Systems and Implementation
+    - Organisation of VSFS - Superblock, Inodes, Data Blocks etc.
+    - Flow of Read/Write operations
+- Distributed Systems
+    - Packet Loss and Reliability
+    - Idempotence and Statelessness
+    - Remote Process Call (RPC)
+- Building a Networking File System in C
