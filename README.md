@@ -1,5 +1,7 @@
 This is my work for the Networking File System Goes Online project, conducted by Programming Club IITK over the summers of 2024. 
 
+The documentation is [here](https://github.com/AdvaithGS/NFS-Goes-Online/blob/main/PClub_NFS_docs-1.pdf)
+
 The project mainly covered:
 - The [basics of the Rust language](https://github.com/AdvaithGS/NFS-Goes-Online/tree/main/Assignment%201)
     - Ownership
